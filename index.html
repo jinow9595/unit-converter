@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React Unit Converter</title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script> <!-- import React -->
+<script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script> <!-- import ReactDOM -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> <!-- import Babel -->
+<script type="text/babel">
+    // const h1 = React.createElement("h1", { 
+    //     id: "span", 
+    //     style: { 
+    //         color: "blue" 
+    //     },
+    //     onMouseEnter: () => console.log("Mouse Enter")
+    // }, "Hello. h1"); // 괄호 안은 태그 이름, properties, content
+    
+    // const button = React.createElement("button", {
+    //     onChange: () => console.log("Click Button")
+    // }, "Click!");
+    // const div = React.createElement("div", null, [span, button]);
+
+    // const H3 = () => (
+    //     <h3 onMouseEnter={() => console.log("h3 mouse enter..")}>
+    //         Hello. h3
+    //     </h3>
+    // );
+
+    // const Button = () => (
+    //     <button onChange={() => console.log("button click..")}>
+    //         Hello. button
+    //     </button>
+    // );
+
+    // 컴포넌트는 반드시 첫문자 대문자
+    const root = document.getElementById("root");
+
+    const App = () => {
+        const[index, setIndex] = React.useState("-1");
+        const onChange = () => {
+            setIndex(event.target.value);
+        }
+
+        return(
+            <div>
+                <h1>Unit Converter</h1>
+                <select name="" id="" onChange={onChange}>
+                    <option value="-1">선택</option>
+                    <option value="0">시간 단위 변환</option>
+                    <option value="1">길이 단위 변환</option>
+                </select>
+                {index === "0" ? <MinToHour /> : null}
+                {index === "1" ? <CmToInch /> : null}
+            </div>
+        );
+    }
+
+    const MinToHour = () => {
+        const [time, setTime] = React.useState("0");
+        const [flipVal, setFlip] = React.useState(false);
+        const onChange = (event) => {
+            setTime(event.target.value); // more safety
+        }
+        const reset = () => setTime("0");
+        const flip = () => {
+            reset();
+            setFlip(current => !current);
+        }
+
+        return(
+            <div>
+                <div>
+                    <label htmlFor="min">min</label>
+                    <input type="number" id="min" onChange={onChange} value={flipVal ? time * 60 : time} disabled={flipVal} />
+                </div>
+                <div>
+                    <label htmlFor="hour">hour</label>
+                    <input type="number" id="hour" onChange={onChange} value={flipVal ? time : Math.round(time / 60)} disabled={!flipVal} />
+                </div>
+                <button onClick={reset}>reset</button>
+                <button onClick={flip}>flip</button>
+            </div>
+        );
+    }
+
+    const CmToInch = () => {
+        const [length, setLength] = React.useState("0");
+        const [flipVal, setFlip] = React.useState(false);
+        const onChange = (event) => {
+            setLength(event.target.value); // more safety
+        }
+        const reset = () => setLength("0");
+        const flip = () => {
+            reset();
+            setFlip(current => !current);
+        }
+
+        return(
+            <div>
+                <div>
+                    <label htmlFor="cm">cm</label>
+                    <input type="number" id="cm" step="0.01" onChange={onChange} value={flipVal ? (length * 2.54).toFixed(2) : length} disabled={flipVal} />
+                </div>
+                <div>
+                    <label htmlFor="inch">inch</label>
+                    <input type="number" id="inch" step="0.01" onChange={onChange} value={flipVal ? length : (length * 0.39).toFixed(2)} disabled={!flipVal} />
+                </div>
+                <button onClick={reset}>reset</button>
+                <button onClick={flip}>flip</button>
+            </div>
+        );
+    }
+
+    ReactDOM.render(<App />, root); // root 안에 컴포넌트 추가
+</script>
+</html>
